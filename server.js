@@ -42,7 +42,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
 app.use(cors());
-// app.use(express.static(path.join(__dirname, "./client/build")));
+app.use(express.static(path.join(__dirname, "./client/build")));
 
 // routes middleware
 app.use("/api", authRoutes);
@@ -52,27 +52,17 @@ app.use("/api", productRoutes);
 app.use("/api", braintreeRoutes);
 app.use("/api", orderRoutes);
 
-// // Server static assets if in production
-// if (process.env.NODE_ENV === "production") {
-//   // Set static folder
-//   app.use(express.static("client/build"));
+ // Server static assets if in production
+ if (process.env.NODE_ENV === "production") {
+   // Set static folder
+   app.use(express.static("client/build"));
 
-//   app.use("*", function (req, res) {
-//     res.sendFile(path.join(__dirname, "./client/build/index.html"));
-//   });
-// }
+   app.use("*", function (req, res) {
+     res.sendFile(path.join(__dirname, "./client/build/index.html"));
+   });
+ }
 
-// serving the frontend
-app.use(express.static(path.join(__dirname, "./client/build")));
 
-app.get("*", function (req, res) {
-  res.sendFile(
-    path.join(__dirname, "./client/build/index.html"),
-    function (err) {
-      res.status(500).send(err);
-    }
-  );
-});
 
 const PORT = process.env.PORT || 5000;
 
